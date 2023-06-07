@@ -6,8 +6,6 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.core import ServiceCall, callback
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-
 
 from .const import DOMAIN, LISTENER, CHECKPOINTING
 from .boinc_control import BoincControl

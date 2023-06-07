@@ -11,7 +11,7 @@ The Interface is primarily meant for controlling a BOINC Client and hence does n
 ```python
 import asyncio
 
-from pyboinc import init_rpc_client, xml_to_dict
+from spuelmett_boinc.pyboinc import init_rpc_client, xml_to_dict
 
 IP_BOINC = "127.0.0.1"
 PASSWORD_BOINC = "example_password"
@@ -19,7 +19,7 @@ PASSWORD_BOINC = "example_password"
 
 async def main():
     rpc_client = await init_rpc_client(IP_BOINC, PASSWORD_BOINC)
-    
+
     # Authorize client if you will be using RPC commands which require it
     # authorize_response = await rpc_client.authorize()
 
@@ -32,7 +32,7 @@ async def main():
     # Get last three messages
     c = await rpc_client.get_message_count()
     print(c)
-    print(await rpc_client.get_messages(c-3))
+    print(await rpc_client.get_messages(c - 3))
 
     print(await rpc_client.get_notices_public(2))
 

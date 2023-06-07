@@ -6,8 +6,8 @@ import unittest
 
 # For the tests
 import asyncio
-from pyboinc import init_rpc_client
-from pyboinc.rpc_client import GUI_RPC_DEFAULT_PORT
+from spuelmett_boinc.pyboinc import init_rpc_client
+from spuelmett_boinc.pyboinc import GUI_RPC_DEFAULT_PORT
 
 ADDRESS = 'localhost'
 

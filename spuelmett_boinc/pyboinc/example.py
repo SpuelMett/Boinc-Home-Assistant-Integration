@@ -1,6 +1,6 @@
 import asyncio
 
-from pyboinc import init_rpc_client
+from spuelmett_boinc.pyboinc import init_rpc_client
 
 IP_BOINC = "192.168.178.77"
 PASSWORD_BOINC = "VHV1uMEBEZW8ohWeSYTg"
