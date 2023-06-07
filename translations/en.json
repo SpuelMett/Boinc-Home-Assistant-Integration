@@ -1,0 +1,30 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Device is already configured"
+        },
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_auth": "Invalid authentication",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "remote_ip": "Ip of Boinc Client",
+                    "password": "Boinc Remote Password",
+                    "checkpoint_time": "Seconds after a checkpoint where task will be suspended in soft stop (60 - 360)"
+                }
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "checkpoint_time": "Seconds after a checkpoint where task will be suspended in soft stop (60 - 360)"
+                }
+            }
+        }
+    }
+}

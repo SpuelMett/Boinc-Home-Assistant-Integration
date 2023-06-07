@@ -1,0 +1,16 @@
+{
+  "domain": "Boinc-Home-Assistant-Integration",
+  "name": "Boinc Control",
+  "codeowners": [
+    "@SpuelMett"
+  ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/SpuelMett/Boinc-Home-Assistant-Control",
+  "homekit": {},
+  "iot_class": "assumed_state",
+  "requirements": [],
+  "ssdp": [],
+  "zeroconf": [],
+  "version": "0.0.1"
+}
