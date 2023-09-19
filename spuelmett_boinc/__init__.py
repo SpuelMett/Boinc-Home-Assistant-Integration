@@ -7,7 +7,8 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.core import ServiceCall, callback
 
-from .const import DOMAIN, LISTENER, CHECKPOINTING
+
+from .const import DOMAIN, LISTENER, CHECKPOINTING, NAME, PASSWORD, BOINC_IP
 from .boinc_control import BoincControl
 
 
@@ -16,8 +17,11 @@ PLATFORMS: list[Platform] = []  # [Platform.SENSOR]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # create object to manage boinc
-    ip = entry.data["remote_ip"]
-    password = entry.data["password"]
+    name = entry.data.get(
+        NAME, "default"
+    )  # use default value, when upgrading from a version with no name in the input
+    ip = entry.data[BOINC_IP]
+    password = entry.data[PASSWORD]
     checkpoint_time = entry.options["checkpoint_time"]
 
     boinc = BoincControl(ip, password, checkpoint_time)
@@ -43,10 +47,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async def soft_stop_check(call: ServiceCall) -> None:
         await boinc.update()
 
-    hass.services.async_register(DOMAIN, "start_boinc", start_boinc)
-    hass.services.async_register(DOMAIN, "stop_boinc", stop_boinc)
-    hass.services.async_register(DOMAIN, "soft_stop_boinc", soft_stop_boinc)
-    hass.services.async_register(DOMAIN, "soft_stop_check", soft_stop_check)
+    hass.services.async_register(DOMAIN, "start_boinc_" + str(name), start_boinc)
+    hass.services.async_register(DOMAIN, "stop_boinc_" + str(name), stop_boinc)
+    hass.services.async_register(
+        DOMAIN, "soft_stop_boinc_" + str(name), soft_stop_boinc
+    )
+    hass.services.async_register(
+        DOMAIN, "soft_stop_check_" + str(name), soft_stop_check
+    )
 
     # Add Event listener to trigger soft stop every minute
     async def update_check(hass: HomeAssistant):

@@ -12,7 +12,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 
-from .const import DOMAIN, BOINC_IP, PASSWORD, CHECKPOINTING
+from .const import NAME, DOMAIN, BOINC_IP, PASSWORD, CHECKPOINTING
 from .pyboinc.pyboinc import init_rpc_client
 
 _LOGGER = logging.getLogger(__name__)
@@ -20,6 +20,7 @@ _LOGGER = logging.getLogger(__name__)
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
+        vol.Required(NAME): str,
         vol.Required(BOINC_IP): str,
         vol.Required(PASSWORD): str,
         vol.Required(CHECKPOINTING, default=120): vol.All(
@@ -39,6 +40,7 @@ STEP_CONFIGURE = vol.Schema(
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
     """Validate the user input allows us to connect."""
+    name = data[NAME]
     ip = data[BOINC_IP]
     password = data[PASSWORD]
 
@@ -50,7 +52,7 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
         raise CannotConnect
 
     if authorize_answer is True:
-        return {"title": "Boinc control"}
+        return {"title": "Boinc control: " + name}
     else:
         raise InvalidAuth
 
@@ -87,6 +89,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 return self.async_create_entry(
                     title=info["title"],
                     data={
+                        NAME: user_input[NAME],
                         BOINC_IP: user_input[BOINC_IP],
                         PASSWORD: user_input[PASSWORD],
                     },

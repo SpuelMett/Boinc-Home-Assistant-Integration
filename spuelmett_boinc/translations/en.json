@@ -11,6 +11,7 @@
         "step": {
             "user": {
                 "data": {
+                    "name": "Name",
                     "remote_ip": "Ip of Boinc Client",
                     "password": "Boinc Remote Password",
                     "checkpoint_time": "Seconds after a checkpoint where task will be suspended in soft stop (60 - 360)"
