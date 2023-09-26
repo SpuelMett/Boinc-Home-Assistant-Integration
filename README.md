@@ -34,10 +34,17 @@ Lets you manually check for the soft stop. This will be done automatically every
 - Copy the spuelmett_boinc folder into the custom_components folder. This folder should be inside the config folder of home assistant. If this folder does not exist yet, create it. 
 - Restart Home Assistant
 - Search for the newly added "Boinc Contorl" integration
-- Fill in the ip and remote password of your boinc client
-- Optionally change the checkpointing time  
+- Fill in a name, the ip and the remote password of your boinc client. The name can be chosen freely.
+- Optionally change the checkpointing time 
 
-Now you can use the mentioned services like any other. Here is an example automation in the automations.yaml. It starts boinc if my energy consumption from grid is under -10 watts for 5 minutes. 
+
+Now you can use the mentioned services like any other. The naming of the services is "spuelmett_boinc.<service>_<name>" where service is 
+- start_boinc
+- stop_boinc
+- soft_stop_boinc
+- soft_stop_check
+
+and name is what you chose in the config. Here is an example automation in the automations.yaml. It starts boinc if my energy consumption from grid is under -10 watts for 5 minutes. 
 ```yaml
 - id: '1111111111111'
   alias: Start Boinc
@@ -52,7 +59,7 @@ Now you can use the mentioned services like any other. Here is an example automa
     below: -10
   condition: []
   action:
-  - service: spuelmett_boinc.start_boinc
+  - service: spuelmett_boinc.start_boinc_name
     data: {}
   mode: single
 ```
