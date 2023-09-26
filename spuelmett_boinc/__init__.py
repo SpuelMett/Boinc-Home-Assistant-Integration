@@ -63,7 +63,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     remove_listener = hass.helpers.event.async_track_time_interval(
         update_check, timedelta(minutes=1), cancel_on_shutdown=True
     )
-    hass.data[DOMAIN][LISTENER] = remove_listener
+
+    # add remove_listener function to haas data
+    listener_name = LISTENER + str(name)
+    hass.data[DOMAIN][listener_name] = remove_listener
 
     return True
 
@@ -71,8 +74,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
 
+    # get name
+    name = entry.data.get(
+        NAME, "default"
+    )  # use default value, when upgrading from a version with no name in the input
+
     # Remove current listener for soft stop
-    remove_listener = hass.data[DOMAIN][LISTENER]
+    listener_name = LISTENER + str(name)  # create name
+    remove_listener = hass.data[DOMAIN][listener_name]
     remove_listener()
 
     # Unload entry
