@@ -90,6 +90,11 @@ class BoincControl:
 
     async def resume_all_task(self):
         results = await self.rpc_client.get_results()
+
+        # if no task are there, results is a string
+        if results == '\n':
+            return
+
         for result in results:
             project_url = result["project_url"]
             name = result["name"]
