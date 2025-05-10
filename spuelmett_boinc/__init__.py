@@ -1,18 +1,19 @@
 """The Boinc Control integration."""
+
 from __future__ import annotations
+
 from datetime import timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
-from homeassistant.core import ServiceCall, callback
+from homeassistant.core import HomeAssistant, ServiceCall
+from homeassistant.helpers.event import async_track_time_interval
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-
-from .const import DOMAIN, LISTENER, CHECKPOINTING, NAME, PASSWORD, BOINC_IP
 from .boinc_control import BoincControl
+from .const import BOINC_IP, CHECKPOINTING, DOMAIN, LISTENER, NAME, PASSWORD
 
-
-PLATFORMS: list[Platform] = []  # [Platform.SENSOR]
+PLATFORMS = [Platform.SENSOR]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -31,19 +32,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     entry.async_on_unload(entry.add_update_listener(async_update_options))
 
     # Register Services that can be called from automations or scripts
-    @callback
     async def start_boinc(call: ServiceCall) -> None:
         await boinc.start_boinc()
 
-    @callback
     async def stop_boinc(call: ServiceCall) -> None:
         await boinc.stop_boinc()
 
-    @callback
     async def soft_stop_boinc(call: ServiceCall) -> None:
         boinc.soft_stop_boinc()
 
-    @callback
     async def soft_stop_check(call: ServiceCall) -> None:
         await boinc.update()
 
@@ -60,11 +57,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async def update_check(hass: HomeAssistant):
         await boinc.update()
 
-    remove_listener = hass.helpers.event.async_track_time_interval(
-        update_check, timedelta(minutes=1), cancel_on_shutdown=True
+    remove_listener = async_track_time_interval(
+        hass, update_check, timedelta(minutes=1), cancel_on_shutdown=True
     )
 
-    # add remove_listener function to haas data
     listener_name = LISTENER + str(name)
     hass.data[DOMAIN][listener_name] = remove_listener
 

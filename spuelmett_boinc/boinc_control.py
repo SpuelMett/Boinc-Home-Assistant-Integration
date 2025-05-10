@@ -1,16 +1,16 @@
 """Boinc Control integration logic."""
+
 from __future__ import annotations
 
 from datetime import timedelta
 
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.typing import ConfigType
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.typing import ConfigType
 
+from .const import BOINC_IP, CHECKPOINTING, PASSWORD
 from .pyboinc.pyboinc import init_rpc_client
 from .pyboinc.pyboinc.rpc_client import Mode
-
-from .const import BOINC_IP, PASSWORD, CHECKPOINTING
 
 
 async def async_setup_platform(
@@ -92,7 +92,7 @@ class BoincControl:
         results = await self.rpc_client.get_results()
 
         # if no task are there, results is a string
-        if results == '\n':
+        if results == "\n":
             return
 
         for result in results:
