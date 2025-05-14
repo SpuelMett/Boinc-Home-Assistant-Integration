@@ -6,11 +6,11 @@
   ],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/SpuelMett/Boinc-Home-Assistant-Control",
+  "documentation": "https://github.com/SpuelMett/Boinc-Home-Assistant-Integration",
   "homekit": {},
   "iot_class": "assumed_state",
   "requirements": [],
   "ssdp": [],
   "zeroconf": [],
-  "version": "0.0.3"
+  "version": "0.0.4"
 }

@@ -1,10 +1,12 @@
 # Boinc-Home-Assistant-Integration
 
 This project lets you start and stop Boinc from Home Assistant. 
-This can be used for example to run Boinc only on solar energy.
+This can be used, for example, to run Boinc only on solar energy.
 It is a custom integration for home assistant that provides services that can be used in scripts or automations.
-It is an improved version of this [project](https://github.com/SpuelMett/Boinc-Home-Assistant-Control).
 This project also uses [pyboinc](https://github.com/nielstron/pyboinc/tree/dev/pyboinc) from Nielstron.
+
+Current version 0.0.4 is tested with Home Assistant 2025.6.0
+The old version 0.0.3 is not working correctly since Home Assistant 2024.11.
 
 The provided Services are:
 

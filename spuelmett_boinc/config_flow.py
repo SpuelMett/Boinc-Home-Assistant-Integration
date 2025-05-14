@@ -1,4 +1,5 @@
 """Config flow for Boinc Control integration."""
+
 from __future__ import annotations
 
 import logging
@@ -12,7 +13,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 
-from .const import NAME, DOMAIN, BOINC_IP, PASSWORD, CHECKPOINTING
+from .const import BOINC_IP, CHECKPOINTING, DOMAIN, NAME, PASSWORD
 from .pyboinc.pyboinc import init_rpc_client
 
 _LOGGER = logging.getLogger(__name__)
@@ -53,8 +54,7 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
 
     if authorize_answer is True:
         return {"title": "Boinc control: " + name}
-    else:
-        raise InvalidAuth
+    raise InvalidAuth
 
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -68,7 +68,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         config_entry: config_entries.ConfigEntry,
     ) -> config_entries.OptionsFlow:
         """Create the options flow."""
-        return OptionsFlowHandler(config_entry)
+        return OptionsFlowHandler()
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -104,9 +104,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 class OptionsFlowHandler(OptionsFlow):
     """Handle options."""
 
-    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
+    def __init__(self) -> None:
         """Initialize options flow."""
-        self.config_entry = config_entry
+        self._conf_app_id: str | None = None
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
