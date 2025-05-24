@@ -4,23 +4,8 @@ from __future__ import annotations
 
 from datetime import timedelta
 
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import ConfigType
-
-from .const import BOINC_IP, CHECKPOINTING, PASSWORD
 from .pyboinc.pyboinc import init_rpc_client
 from .pyboinc.pyboinc.rpc_client import Mode
-
-
-async def async_setup_platform(
-    hass: HomeAssistant, config: ConfigType, add_entities: AddEntitiesCallback
-) -> bool:
-    ip = config[BOINC_IP]
-    password = config[PASSWORD]
-    checkpoint_time = config[CHECKPOINTING]
-
-    await add_entities([BoincControl(ip, password, checkpoint_time)])
 
 
 class BoincControl:
@@ -36,7 +21,6 @@ class BoincControl:
         await self.rpc_client.authorize()
 
     def set_checkpoint_time(self, checkpoint_time):
-        print("Update Object")
         self.checkpoint_time = checkpoint_time
 
     @property

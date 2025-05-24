@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 from typing import Any
 
 import voluptuous as vol
@@ -21,11 +22,16 @@ _LOGGER = logging.getLogger(__name__)
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
-        vol.Required(NAME): str,
+        vol.Required(
+            NAME,
+            default="Client1",
+            msg="Accepts only letters and numbers.",
+            description="test",
+        ): str,
         vol.Required(BOINC_IP): str,
         vol.Required(PASSWORD): str,
         vol.Required(CHECKPOINTING, default=120): vol.All(
-            vol.Coerce(int), vol.Range(min=61, max=360)
+            vol.Coerce(int), vol.Range(min=61, max=3600)
         ),
     }
 )
@@ -39,11 +45,19 @@ STEP_CONFIGURE = vol.Schema(
 )
 
 
+def is_valid_name(name: str) -> bool:
+    """Validate the provided Name."""
+    return bool(re.match(r"[a-zA-Z0-9]*$", name))
+
+
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
     """Validate the user input allows us to connect."""
     name = data[NAME]
     ip = data[BOINC_IP]
     password = data[PASSWORD]
+
+    if is_valid_name(name) is False:
+        raise InvalidName
 
     authorize_answer = False
     try:
@@ -78,6 +92,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             try:
                 info = await validate_input(self.hass, user_input)
+            except InvalidName:
+                errors["base"] = "Invalid Character in name"
             except CannotConnect:
                 errors["base"] = "cannot_connect"
             except InvalidAuth:
@@ -134,3 +150,7 @@ class CannotConnect(HomeAssistantError):
 
 class InvalidAuth(HomeAssistantError):
     """Error to indicate there is invalid auth."""
+
+
+class InvalidName(HomeAssistantError):
+    """Error to indicate there is an invalid name."""
