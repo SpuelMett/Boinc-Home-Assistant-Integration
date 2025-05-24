@@ -5,7 +5,7 @@ This can be used, for example, to run Boinc only on solar energy.
 It is a custom integration for home assistant that provides services that can be used in scripts or automations.
 This project also uses [pyboinc](https://github.com/nielstron/pyboinc/tree/dev/pyboinc) from Nielstron.
 
-Current version 0.0.4 is tested with Home Assistant 2025.6.0
+Current version 0.0.5 is tested with Home Assistant 2025.6.0
 The old version 0.0.3 is not working correctly since Home Assistant 2024.11.
 
 The provided Services are:
@@ -65,3 +65,11 @@ and name is what you chose in the config. Here is an example automation in the a
     data: {}
   mode: single
 ```
+
+# Changelog
+### 0.0.5
+* Add Input validation for Integration Name to prevent error due to service naming.
+* You may need to delete and read your integration in case you used special characters
+
+### 0.0.4
+* Update deprecated stuff for Home Assistant 2025.6.0
