@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from datetime import timedelta
 
+from config.custom_components.spuelmett_boinc.coordinator import BoincCoordinator
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers.event import async_track_time_interval
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .boinc_control import BoincControl
 from .const import BOINC_IP, CHECKPOINTING, DOMAIN, LISTENER, NAME, PASSWORD
@@ -68,6 +68,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     listener_name = LISTENER + str(name)
     hass.data[DOMAIN][listener_name] = remove_listener
+
+    # setup sensor stuff
+    coordinator = BoincCoordinator(hass, entry, boinc)
+    await coordinator.async_config_entry_first_refresh()
+    entry.runtime_data = coordinator
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     return True
 

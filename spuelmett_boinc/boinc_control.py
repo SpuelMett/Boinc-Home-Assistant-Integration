@@ -83,3 +83,64 @@ class BoincControl:
             project_url = result["project_url"]
             name = result["name"]
             await self.rpc_client.resume_result(project_url, name)
+
+    async def get_running_task_count(self):
+        # make sure rpc client is available
+        await self.connect()
+
+        # get results
+        results = await self.rpc_client.get_results()
+
+        # if no task are there, results is a string
+        if results == "\n":
+            return None
+
+        count = 0
+        for result in results:
+            # check if running
+            state = result["state"]
+
+            if "active_task" not in result:
+                continue
+
+            # active task is 1, otherwise it is 0
+            activeState = result["active_task"]["active_task_state"]
+            if activeState == 1:
+                count += 1
+
+        return count
+
+    async def get_total_task_count(self):
+        # make sure rpc client is available
+        await self.connect()
+
+        # get results
+        results = await self.rpc_client.get_results()
+
+        # if no task are there, results is a string
+        if results == "\n":
+            return None
+
+        return len(results)
+
+    async def average_progress_rate(self):
+        # make sure rpc client is available
+        await self.connect()
+
+        # get results
+        results = await self.rpc_client.get_results()
+
+        total_active_tasks = 0
+        total_progress_rate = 0
+
+        for result in results:
+            if "active_task" not in result:
+                continue
+
+            total_progress_rate += result["active_task"]["progress_rate"]
+            total_active_tasks += 1
+
+        if total_active_tasks == 0:
+            return 0
+
+        return total_progress_rate / total_active_tasks
