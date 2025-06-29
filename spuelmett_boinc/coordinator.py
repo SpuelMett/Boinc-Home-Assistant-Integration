@@ -29,7 +29,7 @@ class BoincCoordinator(DataUpdateCoordinator):
             _LOGGER,
             name="Boinc sensor",
             config_entry=config_entry,
-            update_interval=timedelta(seconds=30),
+            update_interval=timedelta(seconds=60),
             always_update=True,
         )
         self._device: SensorDeviceClass | None = None
@@ -43,9 +43,10 @@ class BoincCoordinator(DataUpdateCoordinator):
         return self.config_entry.data.get(NAME, "default")
 
     async def _async_update_data(self):
+        results = await self.boinc.get_results()
         data = {}
-        data[RUNNING_TASK_COUNT] = await self.boinc.get_running_task_count()
-        data[TOTAL_TASK_COUNT] = await self.boinc.get_total_task_count()
-        data[AVERAGE_PROGRESS_RATE] = await self.boinc.average_progress_rate()
+        data[RUNNING_TASK_COUNT] = self.boinc.get_running_task_count(results)
+        data[TOTAL_TASK_COUNT] = self.boinc.get_total_task_count(results)
+        data[AVERAGE_PROGRESS_RATE] = self.boinc.average_progress_rate(results)
 
         return data

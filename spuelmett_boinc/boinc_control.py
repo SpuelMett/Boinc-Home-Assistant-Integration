@@ -84,22 +84,23 @@ class BoincControl:
             name = result["name"]
             await self.rpc_client.resume_result(project_url, name)
 
-    async def get_running_task_count(self):
+    async def get_results(self):
         # make sure rpc client is available
         await self.connect()
 
         # get results
-        results = await self.rpc_client.get_results()
+        return await self.rpc_client.get_results()
 
+    def get_running_task_count(self, results):
         # if no task are there, results is a string
-        if results == "\n":
-            return None
+        if results == "\n" or type(results) is not dict:
+            return 0
+
+        print(results)
 
         count = 0
         for result in results:
             # check if running
-            state = result["state"]
-
             if "active_task" not in result:
                 continue
 
@@ -110,31 +111,22 @@ class BoincControl:
 
         return count
 
-    async def get_total_task_count(self):
-        # make sure rpc client is available
-        await self.connect()
-
-        # get results
-        results = await self.rpc_client.get_results()
-
+    def get_total_task_count(self, results):
         # if no task are there, results is a string
         if results == "\n":
-            return None
+            return 0
 
         return len(results)
 
-    async def average_progress_rate(self):
-        # make sure rpc client is available
-        await self.connect()
-
-        # get results
-        results = await self.rpc_client.get_results()
-
+    def average_progress_rate(self, results):
         total_active_tasks = 0
         total_progress_rate = 0
 
         for result in results:
             if "active_task" not in result:
+                continue
+
+            if "progress_rate" not in result["active_task"]:
                 continue
 
             total_progress_rate += result["active_task"]["progress_rate"]
