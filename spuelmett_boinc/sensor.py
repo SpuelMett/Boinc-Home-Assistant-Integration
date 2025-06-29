@@ -1,12 +1,12 @@
 from dataclasses import dataclass
 import logging
 
-from config.custom_components.spuelmett_boinc.const import (
+from .const import (
     AVERAGE_PROGRESS_RATE,
     RUNNING_TASK_COUNT,
     TOTAL_TASK_COUNT,
 )
-from config.custom_components.spuelmett_boinc.coordinator import BoincCoordinator
+from .coordinator import BoincCoordinator
 from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
 from homeassistant.components.sensor.const import SensorStateClass
 from homeassistant.config_entries import ConfigEntry

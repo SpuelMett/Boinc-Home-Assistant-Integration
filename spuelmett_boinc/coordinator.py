@@ -1,7 +1,7 @@
 from datetime import timedelta
 import logging
 
-from config.custom_components.spuelmett_boinc.const import (
+from .const import (
     AVERAGE_PROGRESS_RATE,
     NAME,
     RUNNING_TASK_COUNT,

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import timedelta
 
-from config.custom_components.spuelmett_boinc.coordinator import BoincCoordinator
+from .coordinator import BoincCoordinator
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, ServiceCall
