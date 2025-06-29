@@ -14,7 +14,7 @@
                     "name": "Name (Numbers and letters)",
                     "remote_ip": "Ip of Boinc Client",
                     "password": "Boinc Remote Password",
-                    "checkpoint_time": "Seconds after a checkpoint where task are suspended in soft stop (60 - 3600)"
+                    "checkpoint_time": "Seconds after a checkpoint where task are suspended in soft stop (60 - 360)"
                 }
             }
         }
@@ -23,7 +23,7 @@
         "step": {
             "init": {
                 "data": {
-                    "checkpoint_time": "Seconds after a checkpoint where task are suspended in soft stop (60 - 3600)"
+                    "checkpoint_time": "Seconds after a checkpoint where task are suspended in soft stop (60 - 360)"
                 }
             }
         }
