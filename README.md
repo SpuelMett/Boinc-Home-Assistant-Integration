@@ -1,27 +1,27 @@
 # Boinc-Home-Assistant-Integration
 
-This project lets you start and stop Boinc from Home Assistant. 
+This project lets you start and stop Boinc from Home Assistant and lets you monitor basic information about your boinc client. 
 This can be used, for example, to run Boinc only on solar energy.
 It is a custom integration for home assistant that provides services that can be used in scripts or automations.
 This project also uses [pyboinc](https://github.com/nielstron/pyboinc/tree/dev/pyboinc) from Nielstron.
 
-Current version 0.0.5 is tested with Home Assistant 2025.6.0
+Current version 0.0.6 is tested with Home Assistant 2025.6.0
 The old version 0.0.3 is not working correctly since Home Assistant 2024.11.
 
 The provided Services are:
 
 ### start boinc
-Sets the run mode to "run based on preferences".
+Set the run mode to "run based on preferences".
 
 ### stop boinc
-Sets the run mode to "never". This will stop are running task immediately.
+Set the run mode to "never". This will stop are running task immediately.
 
 ### soft stop boinc
 Lets all tasks run until they reach a checkpoint to avoid wasting energy when stopping.  
-Sets the run mode to "never" if all running tasks are suspended. 
+Set the run mode to "never" if all running tasks are suspended. 
 
 Pausing of task after a soft stop is checked every minute. You can specify the seconds after a checkpoint where task will be suspended in soft stop.
-For example if this is set to 120 and a pause check is done:
+For example, if this is set to 120 and a pause check is done:
 ```
 A task that made a checkpoint 119 seconds ago will be paused immediately.
 A task that made a checkpoint 121 seconds ago will not be paused.
@@ -66,10 +66,22 @@ and name is what you chose in the config. Here is an example automation in the a
   mode: single
 ```
 
+# Sensors
+Entities are visible form the integration menu and can be added to the Dashboard.
+
 # Changelog
+
+### 0.0.6
+* Added basic sensor information about "total tasks", "running tasks" and "average progress rate"
+
 ### 0.0.5
 * Add Input validation for Integration Name to prevent error due to service naming.
 * You may need to delete and read your integration in case you used special characters
 
 ### 0.0.4
 * Update deprecated stuff for Home Assistant 2025.6.0
+
+
+# Roadmap
+* Add control for gpu (soon)
+* Add more sensors (Let me know what you want and i could try to implement it)
