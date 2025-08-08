@@ -44,6 +44,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     async def soft_stop_check(call: ServiceCall) -> None:
         await boinc.update()
 
+    async def start_gpu(call: ServiceCall) -> None:
+        await boinc.start_gpu()
+
+    async def stop_gpu(call: ServiceCall) -> None:
+        await boinc.stop_gpu()
+
     service_name_suffix = str(name).replace("-", "_")
     hass.services.async_register(
         DOMAIN, "start_boinc_" + service_name_suffix, start_boinc
@@ -57,6 +63,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.services.async_register(
         DOMAIN, "soft_stop_check_" + service_name_suffix, soft_stop_check
     )
+    hass.services.async_register(DOMAIN, "start_gpu_" + service_name_suffix, start_gpu)
+    hass.services.async_register(DOMAIN, "stop_gpu_" + service_name_suffix, stop_gpu)
 
     # Add Event listener to trigger soft stop every minute
     async def update_check(hass: HomeAssistant):

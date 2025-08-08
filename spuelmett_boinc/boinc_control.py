@@ -40,6 +40,14 @@ class BoincControl:
     def soft_stop_boinc(self):
         self.current_soft_stop_state = True
 
+    async def start_gpu(self):
+        await self.connect()
+        await self.rpc_client.set_gpu_mode(Mode.AUTO, 0)
+
+    async def stop_gpu(self):
+        await self.connect()
+        await self.rpc_client.set_gpu_mode(Mode.NEVER, 0)
+
     async def update(self):
         await self.connect()
 
