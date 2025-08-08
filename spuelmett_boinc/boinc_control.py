@@ -37,8 +37,9 @@ class BoincControl:
         await self.connect()
         await self.rpc_client.set_run_mode(Mode.NEVER, 0)
 
-    def soft_stop_boinc(self):
+    async def soft_stop_boinc(self):
         self.current_soft_stop_state = True
+        await self.update()
 
     async def start_gpu(self):
         await self.connect()
@@ -66,6 +67,13 @@ class BoincControl:
                 current_cpu_time = active_task["current_cpu_time"]
                 project_url = result["project_url"]
                 name = result["name"]
+
+                # Pause waiting tasks immediately
+                task_state = active_task["active_task_state"]
+                if task_state == 0:
+                    # resume waiting
+                    await self.rpc_client.suspend_result(project_url, name)
+                    continue
 
                 # Check if last checkpoint was longer ago than the configured value
                 if current_cpu_time - checkpoint_cpu_time < timedelta(

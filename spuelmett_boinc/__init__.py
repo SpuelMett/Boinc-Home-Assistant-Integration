@@ -39,7 +39,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         await boinc.stop_boinc()
 
     async def soft_stop_boinc(call: ServiceCall) -> None:
-        boinc.soft_stop_boinc()
+        await boinc.soft_stop_boinc()
 
     async def soft_stop_check(call: ServiceCall) -> None:
         await boinc.update()
