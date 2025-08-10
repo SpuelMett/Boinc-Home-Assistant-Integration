@@ -109,7 +109,7 @@ class BoincControl:
 
     def get_running_task_count(self, results):
         # if no task are there, results is a string
-        if results == "\n" or type(results) is not list:
+        if results == "\n":
             return 0
 
         count = 0
@@ -127,7 +127,7 @@ class BoincControl:
 
     def get_total_task_count(self, results):
         # if no task are there, results is a string
-        if results == "\n" or type(results) is not list:
+        if results == "\n":
             return 0
 
         return len(results)
