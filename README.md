@@ -5,7 +5,7 @@ This can be used, for example, to run Boinc only on solar energy.
 It is a custom integration for home assistant that provides services that can be used in scripts or automations.
 This project also uses [pyboinc](https://github.com/nielstron/pyboinc/tree/dev/pyboinc) from Nielstron.
 
-Current version 0.0.6 is tested with Home Assistant 2025.6.0
+Current version 0.0.7 is tested with Home Assistant 2025.6.0
 The old version 0.0.3 is not working correctly since Home Assistant 2024.11.
 
 The provided Services are:
@@ -71,6 +71,11 @@ Entities are visible form the integration menu and can be added to the Dashboard
 
 # Changelog
 
+### 0.0.7
+* Added start and stop actions for GPU
+* Improved Soft Stop feature to Stop all non-running task immediately to avoid starting them for a few seconds
+* Minor bug fixes
+
 ### 0.0.6
 * Added basic sensor information about "total tasks", "running tasks" and "average progress rate"
 
@@ -83,5 +88,5 @@ Entities are visible form the integration menu and can be added to the Dashboard
 
 
 # Roadmap
-* Add control for gpu (soon)
 * Add more sensors (Let me know what you want and i could try to implement it)
+* Add Availability sensor to check if boinc is running and the remote access works
