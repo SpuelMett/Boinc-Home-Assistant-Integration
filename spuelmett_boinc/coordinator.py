@@ -6,6 +6,7 @@ from .const import (
     NAME,
     RUNNING_TASK_COUNT,
     TOTAL_TASK_COUNT,
+    AVAILABLE,
 )
 from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.core import HomeAssistant
@@ -45,8 +46,16 @@ class BoincCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         results = await self.boinc.get_results()
         data = {}
-        data[RUNNING_TASK_COUNT] = self.boinc.get_running_task_count(results)
-        data[TOTAL_TASK_COUNT] = self.boinc.get_total_task_count(results)
-        data[AVERAGE_PROGRESS_RATE] = self.boinc.average_progress_rate(results)
+
+        if results is not None:
+            data[RUNNING_TASK_COUNT] = self.boinc.get_running_task_count(results)
+            data[TOTAL_TASK_COUNT] = self.boinc.get_total_task_count(results)
+            data[AVERAGE_PROGRESS_RATE] = self.boinc.average_progress_rate(results)
+        else:
+            data[RUNNING_TASK_COUNT] = None
+            data[TOTAL_TASK_COUNT] = None
+            data[AVERAGE_PROGRESS_RATE] = None
+
+        data[AVAILABLE] = await self.boinc.get_available()
 
         return data

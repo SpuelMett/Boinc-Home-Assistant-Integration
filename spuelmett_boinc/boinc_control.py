@@ -50,7 +50,10 @@ class BoincControl:
         await self.rpc_client.set_gpu_mode(Mode.NEVER, 0)
 
     async def update(self):
-        await self.connect()
+        try:
+            await self.connect()
+        except ConnectionRefusedError:
+            return
 
         # Do nothing if it should not stop
         if self.current_soft_stop_state is False:
@@ -68,7 +71,7 @@ class BoincControl:
                 project_url = result["project_url"]
                 name = result["name"]
 
-                # Pause waiting tasks immediately
+                # Pause waiting tasks immidiatly
                 task_state = active_task["active_task_state"]
                 if task_state == 0:
                     # resume waiting
@@ -101,11 +104,14 @@ class BoincControl:
             await self.rpc_client.resume_result(project_url, name)
 
     async def get_results(self):
-        # make sure rpc client is available
-        await self.connect()
+        try:
+            # make sure rpc client is available
+            await self.connect()
 
-        # get results
-        return await self.rpc_client.get_results()
+            # get results
+            return await self.rpc_client.get_results()
+        except ConnectionRefusedError:
+            return None
 
     def get_running_task_count(self, results):
         # if no task are there, results is a string
@@ -150,3 +156,17 @@ class BoincControl:
             return 0
 
         return total_progress_rate / total_active_tasks
+
+    # Check if client is available by retrieving basic information
+    async def get_available(self):
+        try:
+            await self.connect()
+        except ConnectionRefusedError:
+            return False
+
+        # get results
+        result = await self.rpc_client.get_host_info()
+
+        if result is not None:
+            return True
+        return False
