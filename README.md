@@ -1,24 +1,40 @@
-# Boinc-Home-Assistant-Integration
+# Boinc Control for Home Assistant
 
-This project lets you start and stop Boinc from Home Assistant and lets you monitor basic information about your boinc client. 
-This can be used, for example, to run Boinc only on solar energy.
-It is a custom integration for home assistant that provides services that can be used in scripts or automations.
-This project also uses [pyboinc](https://github.com/nielstron/pyboinc/tree/dev/pyboinc) from Nielstron.
+This Home Assistant integration let's you start and stop BOINC from Home Assistant, which means that it allows you to create automations that:
+* Use exess solar to benefit science.
+* Instead of using direct electric heating for a room, use the heat from your BOINC server to heat a room, and benefit science. 
 
-Current version 0.0.7 is tested with Home Assistant 2025.6.0
-The old version 0.0.3 is not working correctly since Home Assistant 2024.11.
+You can have BOINC running on a separate machine on your network (in contrast to for example add-ons like "Folding@Home" that runs on your Home Assistant host).
 
-The provided Services are:
+Features:
+* Start BOINC service
+* Hard and soft stop
+* Control the usage of GPU separately (if desired)
+* Sensors for *total tasks*, *running tasks* and *average progress rate*
+* Control multiple BOINC servers (if you have multiple BOINC hosts)
 
-### start boinc
-Set the run mode to "run based on preferences".
+# Installation
 
-### stop boinc
-Set the run mode to "never". This will stop are running task immediately.
+1. Configure Boinc to allow remote control. This typically includes editing ```remote_hosts.cfg``` and ```gui_rpc_auth.cfg``` and restarting BOINC.
+1. Copy the ```/spuelmett_boinc``` folder from this project into your Home Assistant's folder ```config/custom_components```.
+2. Restart Home Assistant
+3. Add integration "Boinc Control"
+4. Enter a name, the IP-adress (no port) and the password you have set in ```gui_rpc_auth.cfg```
+1. If the connection was successful you'll get a message about it. If it was unsuccessful, then do some network troubleshooting 
+2. Verify that the integration works. Go to Developer Tools -> Actions -> search for "boinc". Start and stop Boinc to see that BOINC is responding as expected.
+1. Create your automations of choice using the new BOINC control services available in your Home Assistant.
 
-### soft stop boinc
-Lets all tasks run until they reach a checkpoint to avoid wasting energy when stopping.  
-Set the run mode to "never" if all running tasks are suspended. 
+# Understanding the BOINC control services
+
+## Start boinc
+Sets the run mode of BOINC to "run based on preferences".
+
+## Stop boinc
+Set the run mode to "never". This will stop any running task immediately (wasting some energy), a.k.a a hard stop.
+
+## Soft stop boinc
+Lets all tasks run until they reach a checkpoint to avoid wasting energy when stopping.
+If all running tasks are already suspended, it sets the run mode to "never". 
 
 Pausing of task after a soft stop is checked every minute. You can specify the seconds after a checkpoint where task will be suspended in soft stop.
 For example, if this is set to 120 and a pause check is done:
@@ -31,22 +47,8 @@ Because the stop check is made every 60 seconds this value needs to be greater t
 ### soft stop check
 Lets you manually check for the soft stop. This will be done automatically every minute.
 
-
-# Usage
-- Copy the spuelmett_boinc folder into the custom_components folder. This folder should be inside the config folder of home assistant. If this folder does not exist yet, create it. 
-- Restart Home Assistant
-- Search for the newly added "Boinc Contorl" integration
-- Fill in a name, the ip and the remote password of your boinc client. The name can be chosen freely.
-- Optionally change the checkpointing time 
-
-
-Now you can use the mentioned services like any other. The naming of the services is "spuelmett_boinc.<service>_<name>" where service is 
-- start_boinc
-- stop_boinc
-- soft_stop_boinc
-- soft_stop_check
-
-and name is what you chose in the config. Here is an example automation in the automations.yaml. It starts boinc if my energy consumption from grid is under -10 watts for 5 minutes. 
+# Example automation
+An example automation that starts BOINC if the energy consumption from grid is under -10 watts for 5 minutes. 
 ```yaml
 - id: '1111111111111'
   alias: Start Boinc
@@ -66,26 +68,33 @@ and name is what you chose in the config. Here is an example automation in the a
   mode: single
 ```
 
-# Sensors
-Entities are visible form the integration menu and can be added to the Dashboard.
+# Troubleshooting connectivity
+
+* Double check ```remote_hosts.cfg``` and ```gui_rpc_auth.cfg```
+* Can you connect from the HA host to the BOINC machine?
+* Is there a firewall on the BOINC server blocking you?
+* If you use Docker - have you allowed port 31416?
+
+# Credit
+This project uses [pyboinc](https://github.com/nielstron/pyboinc/tree/dev/pyboinc) from Nielstron.
 
 # Changelog
 
-### 0.0.7
+## 0.0.7
 * Added start and stop actions for GPU
 * Improved Soft Stop feature to Stop all non-running task immediately to avoid starting them for a few seconds
 * Minor bug fixes
+* Tested with Home Assistant 2025.6.0
 
-### 0.0.6
+## 0.0.6
 * Added basic sensor information about "total tasks", "running tasks" and "average progress rate"
 
-### 0.0.5
+## 0.0.5
 * Add Input validation for Integration Name to prevent error due to service naming.
 * You may need to delete and read your integration in case you used special characters
 
-### 0.0.4
+## 0.0.4
 * Update deprecated stuff for Home Assistant 2025.6.0
-
 
 # Roadmap
 * Add more sensors (Let me know what you want and i could try to implement it)
