@@ -1,5 +1,8 @@
 # Boinc-Home-Assistant-Integration
 
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+![Validate](https://github.com/SpuelMett/Boinc-Home-Assistant-Integration/workflows/Validate/badge.svg)
+
 This project lets you start and stop Boinc from Home Assistant and lets you monitor basic information about your boinc client. 
 This can be used, for example, to run Boinc only on solar energy.
 It is a custom integration for home assistant that provides services that can be used in scripts or automations.
@@ -7,6 +10,32 @@ This project also uses [pyboinc](https://github.com/nielstron/pyboinc/tree/dev/p
 
 Current version 0.0.7 is tested with Home Assistant 2025.6.0
 The old version 0.0.3 is not working correctly since Home Assistant 2024.11.
+
+## Installation
+
+### HACS (Recommended)
+
+1. Make sure you have [HACS](https://hacs.xyz/) installed in your Home Assistant instance
+2. Add this repository as a custom repository in HACS:
+   - Go to HACS → Integrations
+   - Click the three dots in the top right corner
+   - Select "Custom repositories"
+   - Add `https://github.com/SpuelMett/Boinc-Home-Assistant-Integration` as repository
+   - Select "Integration" as category
+3. Click "Install" on the Boinc Control integration
+4. Restart Home Assistant
+5. Go to Settings → Devices & Services → Add Integration
+6. Search for "Boinc Control" and follow the configuration steps
+
+### Manual Installation
+
+1. Copy the `spuelmett_boinc` folder into the `custom_components` folder in your Home Assistant config directory
+2. If the `custom_components` folder doesn't exist, create it
+3. Restart Home Assistant
+4. Go to Settings → Devices & Services → Add Integration
+5. Search for "Boinc Control" and follow the configuration steps
+
+## Services
 
 The provided Services are:
 
@@ -31,22 +60,28 @@ Because the stop check is made every 60 seconds this value needs to be greater t
 ### soft stop check
 Lets you manually check for the soft stop. This will be done automatically every minute.
 
+## Configuration
 
-# Usage
-- Copy the spuelmett_boinc folder into the custom_components folder. This folder should be inside the config folder of home assistant. If this folder does not exist yet, create it. 
-- Restart Home Assistant
-- Search for the newly added "Boinc Contorl" integration
-- Fill in a name, the ip and the remote password of your boinc client. The name can be chosen freely.
+After installing the integration (via HACS or manually), you need to configure it:
+
+- Go to Settings → Devices & Services → Add Integration
+- Search for the newly added "Boinc Control" integration
+- Fill in a name, the IP address and the remote password of your boinc client. The name can be chosen freely.
 - Optionally change the checkpointing time 
 
+## Usage
 
-Now you can use the mentioned services like any other. The naming of the services is "spuelmett_boinc.<service>_<name>" where service is 
+The services can be used in automations and scripts. The naming of the services is `spuelmett_boinc.<service>_<name>` where service is: 
 - start_boinc
 - stop_boinc
 - soft_stop_boinc
 - soft_stop_check
 
-and name is what you chose in the config. Here is an example automation in the automations.yaml. It starts boinc if my energy consumption from grid is under -10 watts for 5 minutes. 
+and `name` is what you chose in the config. 
+
+### Example Automation
+
+Here is an example automation in the automations.yaml. It starts boinc if my energy consumption from grid is under -10 watts for 5 minutes. 
 ```yaml
 - id: '1111111111111'
   alias: Start Boinc
