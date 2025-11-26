@@ -1,4 +1,4 @@
-name: Validate
+name: HACS Validation
 on:
   push:
   pull_request:
@@ -13,8 +13,4 @@ jobs:
         uses: "hacs/action@main"
         with:
           category: "integration"
-          ignore:
-            - description
-            - topics
-            - issues
-            - brands
+          ignore: description topics issues brands #TODO: Fix ignored items
