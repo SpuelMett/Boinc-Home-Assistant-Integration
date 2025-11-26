@@ -2,6 +2,7 @@
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 ![Validate](https://github.com/SpuelMett/Boinc-Home-Assistant-Integration/workflows/Validate/badge.svg)
+![Hassfest](https://github.com/SpuelMett/Boinc-Home-Assistant-Integration/workflows/Hassfest/badge.svg)
 
 This project lets you start and stop Boinc from Home Assistant and lets you monitor basic information about your boinc client. 
 This can be used, for example, to run Boinc only on solar energy.
