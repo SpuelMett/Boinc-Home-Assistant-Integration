@@ -137,4 +137,4 @@ This project uses [pyboinc](https://github.com/nielstron/pyboinc/tree/dev/pyboin
 * Add more sensors (Let me know what you want and i could try to implement it)
 * Add Availability sensor to check if boinc is running and the remote access works
 * Document the GPU services
-* Add HACS support by implementing 
+* Add HACS support
